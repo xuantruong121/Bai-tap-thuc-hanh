@@ -7,6 +7,8 @@ import BellIcon from '../assets/Bell-1.png';
 import QuestionIcon from '../assets/Question-1.png';
 import UserIcon from '../assets/Avatar-313.png';
 import SearchIcon from '../assets/Search.png';
+import PencilIcon from '../assets/create.png';
+import ReportIcon from '../assets/File-text-1.png';
 
 // image
 import Avatar1 from '../assets/Avatar.png';
@@ -40,6 +42,70 @@ const Dashboard = () => {
 
         fetchStats();
     }, []);
+
+    const orders = [
+        {
+            avatar: Avatar1,
+            name: 'Elizabeth Lee',
+            company: 'AvatarSystems',
+            value: '$359',
+            date: '10/07/2023',
+            status: 'New'
+        },
+        {
+            avatar: Avatar2,
+            name: 'Carlos Garcia',
+            company: 'SmoozeShift',
+            value: '$747',
+            date: '24/07/2023',
+            status: 'New'
+        },
+        {
+            avatar: Avatar3,
+            name: 'Elizabeth Bailey',
+            company: 'Prime Time Telecom',
+            value: '$664',
+            date: '08/08/2023',
+            status: 'In-progress'
+        },
+        {
+            avatar: Avatar4,
+            name: 'Ryan Brown',
+            company: 'OmniTech Corporation',
+            value: '$541',
+            date: '31/08/2023',
+            status: 'In-progress'
+        },
+        {
+            avatar: Avatar5,
+            name: 'Ryan Young',
+            company: 'DataStream Inc.',
+            value: '$769',
+            date: '01/05/2023',
+            status: 'Completed'
+        },
+        {
+            avatar: Avatar6,
+            name: 'Hailey Adams',
+            company: 'FlowRush',
+            value: '$922',
+            date: '10/06/2023',
+            status: 'Completed'
+        }
+    ];
+
+    const getStatusBadgeClass = (status) => {
+        switch (status) {
+            case 'New':
+                return 'text-primary bg-primary bg-opacity-10 px-2 py-1 rounded-pill';
+            case 'In-progress':
+                return 'text-warning bg-warning bg-opacity-10 px-2 py-1 rounded-pill';
+            case 'Completed':
+                return 'text-success bg-success bg-opacity-10 px-2 py-1 rounded-pill';
+            default:
+                return 'text-secondary';
+        }
+    };
 
 
     return (
@@ -93,6 +159,96 @@ const Dashboard = () => {
                         </Col>
                     ))}
                 </Row>
+            </div>
+
+
+
+
+
+
+
+            {/* Detailed Report Section */}
+            <div>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h6 className="mb-0 d-flex align-items-center gap-2">
+                        <img src={ReportIcon} alt="" />
+                        Detailed report
+                    </h6>
+                    <div>
+                        <Button variant="outline-primary" size="sm" className="me-2 rounded-pill px-3">
+                            Import
+                        </Button>
+                        <Button variant="outline-primary" size="sm" className="rounded-pill px-3">
+                            Export
+                        </Button>
+                    </div>
+                </div>
+
+                <Card className="border-0 shadow-sm">
+                    <Card.Body>
+                        <Table hover responsive className="align-middle">
+                            <thead className="text-muted" style={{ fontSize: '0.875rem' }}>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" className="form-check-input" />
+                                    </th>
+                                    <th>CUSTOMER NAME</th>
+                                    <th>COMPANY</th>
+                                    <th>ORDER VALUE</th>
+                                    <th>ORDER DATE</th>
+                                    <th>STATUS</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orders.map((order, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                            <input type="checkbox" className="form-check-input" />
+                                        </td>
+                                        <td>
+                                            <div className="d-flex align-items-center">
+                                                <div className="me-3">
+                                                    <div className="avatar">
+                                                        <img src={order.avatar} alt="" />
+                                                    </div>
+                                                </div>
+                                                {order.name}
+                                            </div>
+                                        </td>
+                                        <td>{order.company}</td>
+                                        <td>{order.value}</td>
+                                        <td>{order.date}</td>
+                                        <td>
+                                            <span className={getStatusBadgeClass(order.status)}>
+                                                {order.status}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button className="border-0 bg-transparent"><img src={PencilIcon} alt="" /></button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                        <div className="d-flex justify-content-between align-items-center mt-4">
+                            <div className="text-muted small">63 results</div>
+                            <div className="d-flex gap-2">
+                                {[1, 2, 3, 4, '...', 10, 11].map((page, index) => (
+                                    <Button
+                                        key={index}
+                                        variant={page === 1 ? 'primary' : 'light'}
+                                        size="sm"
+                                        className="rounded-circle"
+                                        style={{ width: '32px', height: '32px', padding: 0 }}
+                                    >
+                                        {page}
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
+                    </Card.Body>
+                </Card>
             </div>
         </div>
     );
