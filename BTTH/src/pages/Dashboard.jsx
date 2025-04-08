@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Button, Form } from 'react-bootstrap';
+import EditModal from '../components/EditModal/EditModal';
 
 // icon
 import OverviewIcon from '../assets/Squares-four-1.png';
@@ -21,41 +22,61 @@ import Avatar6 from '../assets/Avatar (5).png';
 const Dashboard = () => {
     const [stats, setStats] = useState([]);
     const [orders, setOrders] = useState([]);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const fetchData = async () => {
+        try {
+            setIsLoading(true);
+            const response = await fetch('https://67c844700acf98d07085b8a0.mockapi.io/Stats');
+            const responseOrders = await fetch('https://67c844700acf98d07085b8a0.mockapi.io/Orders');
+
+            const data = await response.json();
+            const dataOrders = await responseOrders.json();
+
+            const formattedStats = data.map(item => ({
+                title: item.title,
+                value: item.value,
+                change: item.change,
+                icon: item.icon 
+            }));
+
+            const formattedOrders = dataOrders.map(item => ({
+                id: item.id,
+                avatar: item.avatar,
+                name: item.name,
+                company: item.company,
+                value: item.value,
+                date: item.date,
+                status: item.status
+            }));
+
+            setStats(formattedStats);
+            setOrders(formattedOrders);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const response = await fetch('https://67c844700acf98d07085b8a0.mockapi.io/Stats');
-                const responseOrders = await fetch('https://67c844700acf98d07085b8a0.mockapi.io/Orders');
-
-                const data = await response.json();
-                const dataOrders = await responseOrders.json();
-
-                const formattedStats = data.map(item => ({
-                    title: item.title,
-                    value: item.value,
-                    change: item.change,
-                    icon: item.icon 
-                }));
-
-                const formattedOrders = dataOrders.map(item => ({
-                    avatar: item.avatar,
-                    name: item.name,
-                    company: item.company,
-                    value: item.value,
-                    date: item.date,
-                    status: item.status
-                }));
-
-                setStats(formattedStats);
-                setOrders(formattedOrders);
-            } catch (error) {
-                console.error('Error fetching stats:', error);
-            }
-        };
-
-        fetchStats();
+        fetchData();
     }, []);
+
+    const handleEditClick = (order) => {
+        setSelectedOrder(order);
+        setShowEditModal(true);
+    };
+
+    const handleSaveOrder = (updatedOrder) => {
+        setOrders(prevOrders => 
+            prevOrders.map(order => 
+                order.id === updatedOrder.id ? updatedOrder : order
+            )
+        );
+    };
 
     const getStatusBadgeClass = (status) => {
         switch (status) {
@@ -70,6 +91,15 @@ const Dashboard = () => {
         }
     };
 
+    if (isLoading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="px-4 py-3">
@@ -123,12 +153,6 @@ const Dashboard = () => {
                     ))}
                 </Row>
             </div>
-
-
-
-
-
-
 
             {/* Detailed Report Section */}
             <div>
@@ -188,7 +212,12 @@ const Dashboard = () => {
                                             </span>
                                         </td>
                                         <td>
-                                            <button className="border-0 bg-transparent"><img src={PencilIcon} alt="" /></button>
+                                            <button 
+                                                className="border-0 bg-transparent" 
+                                                onClick={() => handleEditClick(order)}
+                                            >
+                                                <img src={PencilIcon} alt="" />
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
@@ -213,6 +242,13 @@ const Dashboard = () => {
                     </Card.Body>
                 </Card>
             </div>
+
+            <EditModal
+                show={showEditModal}
+                handleClose={() => setShowEditModal(false)}
+                order={selectedOrder}
+                onSave={handleSaveOrder}
+            />
         </div>
     );
 };
