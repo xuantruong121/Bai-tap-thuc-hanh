@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Button, Form } from 'react-bootstrap';
 import EditModal from '../components/EditModal/EditModal';
+import AddModal from '../components/AddModal/AddModal';
 
 // icon
 import OverviewIcon from '../assets/Squares-four-1.png';
@@ -23,6 +24,7 @@ const Dashboard = () => {
     const [stats, setStats] = useState([]);
     const [orders, setOrders] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -70,12 +72,20 @@ const Dashboard = () => {
         setShowEditModal(true);
     };
 
+    const handleAddClick = () => {
+        setShowAddModal(true);
+    };
+
     const handleSaveOrder = (updatedOrder) => {
         setOrders(prevOrders => 
             prevOrders.map(order => 
                 order.id === updatedOrder.id ? updatedOrder : order
             )
         );
+    };
+
+    const handleAddOrder = (newOrder) => {
+        setOrders(prevOrders => [...prevOrders, newOrder]);
     };
 
     const getStatusBadgeClass = (status) => {
@@ -162,7 +172,12 @@ const Dashboard = () => {
                         Detailed report
                     </h6>
                     <div>
-                        <Button variant="outline-primary" size="sm" className="me-2 rounded-pill px-3">
+                        <Button 
+                            variant="outline-primary" 
+                            size="sm" 
+                            className="me-2 rounded-pill px-3"
+                            onClick={handleAddClick}
+                        >
                             Import
                         </Button>
                         <Button variant="outline-primary" size="sm" className="rounded-pill px-3">
@@ -248,6 +263,12 @@ const Dashboard = () => {
                 handleClose={() => setShowEditModal(false)}
                 order={selectedOrder}
                 onSave={handleSaveOrder}
+            />
+
+            <AddModal
+                show={showAddModal}
+                handleClose={() => setShowAddModal(false)}
+                onAdd={handleAddOrder}
             />
         </div>
     );
