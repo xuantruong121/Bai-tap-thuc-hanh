@@ -20,21 +20,35 @@ import Avatar6 from '../assets/Avatar (5).png';
 
 const Dashboard = () => {
     const [stats, setStats] = useState([]);
+    const [orders, setOrders] = useState([]);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
                 const response = await fetch('https://67c844700acf98d07085b8a0.mockapi.io/Stats');
+                const responseOrders = await fetch('https://67c844700acf98d07085b8a0.mockapi.io/Orders');
+
                 const data = await response.json();
+                const dataOrders = await responseOrders.json();
 
                 const formattedStats = data.map(item => ({
                     title: item.title,
                     value: item.value,
                     change: item.change,
-                    icon: item.icon // Sử dụng icon từ API
+                    icon: item.icon 
+                }));
+
+                const formattedOrders = dataOrders.map(item => ({
+                    avatar: item.avatar,
+                    name: item.name,
+                    company: item.company,
+                    value: item.value,
+                    date: item.date,
+                    status: item.status
                 }));
 
                 setStats(formattedStats);
+                setOrders(formattedOrders);
             } catch (error) {
                 console.error('Error fetching stats:', error);
             }
@@ -42,57 +56,6 @@ const Dashboard = () => {
 
         fetchStats();
     }, []);
-
-    const orders = [
-        {
-            avatar: Avatar1,
-            name: 'Elizabeth Lee',
-            company: 'AvatarSystems',
-            value: '$359',
-            date: '10/07/2023',
-            status: 'New'
-        },
-        {
-            avatar: Avatar2,
-            name: 'Carlos Garcia',
-            company: 'SmoozeShift',
-            value: '$747',
-            date: '24/07/2023',
-            status: 'New'
-        },
-        {
-            avatar: Avatar3,
-            name: 'Elizabeth Bailey',
-            company: 'Prime Time Telecom',
-            value: '$664',
-            date: '08/08/2023',
-            status: 'In-progress'
-        },
-        {
-            avatar: Avatar4,
-            name: 'Ryan Brown',
-            company: 'OmniTech Corporation',
-            value: '$541',
-            date: '31/08/2023',
-            status: 'In-progress'
-        },
-        {
-            avatar: Avatar5,
-            name: 'Ryan Young',
-            company: 'DataStream Inc.',
-            value: '$769',
-            date: '01/05/2023',
-            status: 'Completed'
-        },
-        {
-            avatar: Avatar6,
-            name: 'Hailey Adams',
-            company: 'FlowRush',
-            value: '$922',
-            date: '10/06/2023',
-            status: 'Completed'
-        }
-    ];
 
     const getStatusBadgeClass = (status) => {
         switch (status) {
