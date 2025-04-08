@@ -1,5 +1,6 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
+import { Link, useLocation } from 'react-router-dom';
 import dashboardIcon from '../../assets/Squares-four-1.png';
 import projectsIcon from '../../assets/Folder.png';
 import teamsIcon from '../../assets/Groups.png';
@@ -11,6 +12,8 @@ import GroupIcon from '../../assets/Group.png';
 import './Sidebar.css';
 
 const Sidebar = () => {
+    const location = useLocation();
+
     return (
         <div className="sidebar bg-white" style={{ width: '250px', position: 'fixed', height: '100vh', borderRight: '1px solid #dee2e6' }}>
             <div className="p-3 border-bottom">
@@ -20,27 +23,27 @@ const Sidebar = () => {
             </div>
 
             <Nav className="flex-column p-3">
-                <Nav.Link className="mb-2 active d-flex align-items-center">
+                <Nav.Link as={Link} to="/" className={`mb-2 d-flex align-items-center ${location.pathname === '/' ? 'active' : ''}`}>
                     <img src={dashboardIcon} alt="Dashboard" className="me-2" style={{ width: '20px', height: '20px' }} />
                     Dashboard
                 </Nav.Link>
-                <Nav.Link className="mb-2 d-flex align-items-center">
+                <Nav.Link as={Link} to="/projects" className={`mb-2 d-flex align-items-center ${location.pathname === '/projects' ? 'active' : ''}`}>
                     <img src={projectsIcon} alt="Projects" className="me-2" style={{ width: '20px', height: '20px' }} />
                     Projects
                 </Nav.Link>
-                <Nav.Link className="mb-2 d-flex align-items-center">
+                <Nav.Link as={Link} to="/teams" className={`mb-2 d-flex align-items-center ${location.pathname === '/teams' ? 'active' : ''}`}>
                     <img src={teamsIcon} alt="Teams" className="me-2" style={{ width: '20px', height: '20px' }} />
                     Teams
                 </Nav.Link>
-                <Nav.Link className="mb-2 d-flex align-items-center">
+                <Nav.Link as={Link} to="/analytics" className={`mb-2 d-flex align-items-center ${location.pathname === '/analytics' ? 'active' : ''}`}>
                     <img src={analyticsIcon} alt="Analytics" className="me-2" style={{ width: '20px', height: '20px' }} />
                     Analytics
                 </Nav.Link>
-                <Nav.Link className="mb-2 d-flex align-items-center">
+                <Nav.Link as={Link} to="/messages" className={`mb-2 d-flex align-items-center ${location.pathname === '/messages' ? 'active' : ''}`}>
                     <img src={messagesIcon} alt="Messages" className="me-2" style={{ width: '20px', height: '20px' }} />
                     Messages
                 </Nav.Link>
-                <Nav.Link className="mb-2 d-flex align-items-center">
+                <Nav.Link as={Link} to="/integrations" className={`mb-2 d-flex align-items-center ${location.pathname === '/integrations' ? 'active' : ''}`}>
                     <img src={integrationsIcon} alt="Integrations" className="me-2" style={{ width: '20px', height: '20px' }} />
                     Integrations
                 </Nav.Link>
