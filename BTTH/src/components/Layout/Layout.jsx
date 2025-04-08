@@ -7,7 +7,10 @@ const Layout = () => {
     return (
         <div className="d-flex">
             <Sidebar />
-            <main className="flex-grow-1" style={{ marginLeft: '250px', padding: '20px', backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
+            <main className="flex-grow-1" style={{
+                marginLeft: '250px',
+                padding: '20px', backgroundColor: '#f8f9fa', minHeight: '100vh'
+            }}>
                 <Container fluid className="py-3">
                     <Outlet />
                 </Container>
